@@ -139,6 +139,148 @@ def analyze_ux_patterns(results: dict[str, np.ndarray], roi_idx: dict):
     return analysis, matrix, emotions, rois
 
 
+# ── HIX Proxy Signals ─────────────────────────────────────────────────────
+# Human Interface eXperience proxy signals derived from brain ROI activations.
+# These can serve as reward/cost functions for closed-loop autonomous design.
+
+HIX_SIGNALS = {
+    "cognitive_load": {
+        "description": "Mental effort required to process the interface",
+        "positive_rois": ["Frontal sup.", "Frontal mid.", "Broca's area", "Angular/TPJ"],
+        "negative_rois": ["Precuneus", "Cingulate post."],
+        "interpretation": "high = hard to process, low = effortless",
+    },
+    "frustration": {
+        "description": "Negative affect from blocked goals or confusion",
+        "positive_rois": ["Insula", "Cingulate ant.", "Frontal mid."],
+        "negative_rois": ["Precuneus", "Cingulate post."],
+        "interpretation": "high = frustrated/confused, low = satisfied",
+    },
+    "engagement": {
+        "description": "Sustained attention and interest",
+        "positive_rois": ["Wernicke's area", "Temporal mid.", "Frontal sup.", "Fusiform (FFA)"],
+        "negative_rois": [],
+        "interpretation": "high = engaged, low = disengaged/bored",
+    },
+    "reward": {
+        "description": "Positive affect, satisfaction, delight",
+        "positive_rois": ["Orbital frontal", "Cingulate ant.", "Temporal pole"],
+        "negative_rois": ["Insula"],
+        "interpretation": "high = delighted, low = indifferent",
+    },
+    "confusion": {
+        "description": "Mismatch between expectation and experience",
+        "positive_rois": ["Cingulate ant.", "Frontal mid.", "Insula"],
+        "negative_rois": ["Wernicke's area", "Temporal mid."],
+        "interpretation": "high = confused/lost, low = clear understanding",
+    },
+    "flow": {
+        "description": "Optimal state of effortless focused engagement",
+        "positive_rois": ["Frontal sup.", "Broca's area", "Motor", "Somatosensory"],
+        "negative_rois": ["Angular/TPJ", "Precuneus", "Cingulate ant."],
+        "interpretation": "high = in flow, low = distracted or self-conscious",
+    },
+    "trust": {
+        "description": "Sense of safety and reliability of the interface",
+        "positive_rois": ["Temporal pole", "Cingulate post.", "Precuneus"],
+        "negative_rois": ["Insula", "Cingulate ant."],
+        "interpretation": "high = trusting, low = suspicious/wary",
+    },
+    "spatial_clarity": {
+        "description": "Ease of navigating and orienting within the interface",
+        "positive_rois": ["Parahipp. (PPA)", "Occipital", "Angular/TPJ"],
+        "negative_rois": ["Frontal mid.", "Insula"],
+        "interpretation": "high = clear spatial model, low = disoriented",
+    },
+}
+
+
+def compute_hix_signals(preds: np.ndarray, roi_idx: dict) -> dict[str, float]:
+    """Compute all HIX proxy signals from brain predictions."""
+    activation = roi_means(preds, roi_idx)
+    signals = {}
+    for sig_name, sig_def in HIX_SIGNALS.items():
+        pos = sum(activation.get(r, 0) for r in sig_def["positive_rois"])
+        neg = sum(activation.get(r, 0) for r in sig_def["negative_rois"])
+        signals[sig_name] = float(pos - neg)
+    return signals
+
+
+def compute_hix_for_all(results: dict[str, np.ndarray], roi_idx: dict) -> dict[str, dict[str, float]]:
+    """Compute HIX signals for every UX condition."""
+    return {name: compute_hix_signals(preds, roi_idx) for name, preds in results.items()}
+
+
+def plot_hix_dashboard(hix_all: dict, output_path):
+    """Plot HIX signal dashboard: heatmap of all signals × conditions."""
+    conditions = sorted(hix_all.keys())
+    signals = sorted(HIX_SIGNALS.keys())
+    matrix = np.array([[hix_all[c][s] for s in signals] for c in conditions])
+
+    # Normalize per-signal for visual comparison
+    for j in range(matrix.shape[1]):
+        col = matrix[:, j]
+        rng = col.max() - col.min()
+        if rng > 0:
+            matrix[:, j] = (col - col.min()) / rng
+
+    fig, ax = plt.subplots(figsize=(14, max(10, len(conditions) * 0.4)))
+    im = ax.imshow(matrix, cmap="RdYlGn_r", aspect="auto", vmin=0, vmax=1)
+    ax.set_xticks(range(len(signals)))
+    ax.set_xticklabels([s.replace("_", "\n") for s in signals], fontsize=9, rotation=0)
+    ax.set_yticks(range(len(conditions)))
+    ax.set_yticklabels([c.replace("_", " ") for c in conditions], fontsize=8)
+    plt.colorbar(im, ax=ax, label="Normalized signal (0=best, 1=worst for neg signals)")
+    ax.set_title("HIX Proxy Signals: Human Interface Experience Dashboard", fontsize=14, fontweight="bold")
+    fig.tight_layout()
+    fig.savefig(output_path, dpi=150, bbox_inches="tight")
+    plt.close(fig)
+    print(f"Saved: {output_path}")
+
+
+def plot_hix_paired(hix_all: dict, output_path):
+    """Show HIX signal differences for good vs bad UX pairs."""
+    pairs = [
+        ("clean_ui", "cluttered_ui", "Clean vs Cluttered"),
+        ("honest_checkout", "dark_checkout", "Honest vs Dark Checkout"),
+        ("helpful_error", "cryptic_error", "Helpful vs Cryptic Error"),
+        ("flow_enabling", "flow_breaking", "Flow vs Interrupted"),
+        ("good_hierarchy", "bad_hierarchy", "Good vs Bad IA"),
+        ("search_works", "search_fails", "Search Works vs Fails"),
+        ("meaningful_progress", "manipulative_gamification", "Meaningful vs Manipulative"),
+        ("graceful_failure", "catastrophic_failure", "Graceful vs Catastrophic"),
+    ]
+
+    signals = sorted(HIX_SIGNALS.keys())
+    valid_pairs = [(g, b, l) for g, b, l in pairs if g in hix_all and b in hix_all]
+    if not valid_pairs:
+        return
+
+    fig, axes = plt.subplots(len(valid_pairs), 1, figsize=(14, 3.5 * len(valid_pairs)))
+    if len(valid_pairs) == 1:
+        axes = [axes]
+
+    for ax, (good, bad, label) in zip(axes, valid_pairs):
+        good_vals = [hix_all[good][s] for s in signals]
+        bad_vals = [hix_all[bad][s] for s in signals]
+        x = np.arange(len(signals))
+        w = 0.35
+        ax.bar(x - w / 2, good_vals, w, label="Good UX", color="#4daf4a", alpha=0.8)
+        ax.bar(x + w / 2, bad_vals, w, label="Bad UX", color="#e41a1c", alpha=0.8)
+        ax.set_xticks(x)
+        ax.set_xticklabels([s.replace("_", "\n") for s in signals], fontsize=8)
+        ax.set_title(label, fontsize=11, fontweight="bold")
+        ax.legend(fontsize=8)
+        ax.axhline(0, color="black", linewidth=0.3)
+
+    fig.suptitle("HIX Signals: Good vs Bad UX\n(reward signals for autonomous design)",
+                 fontsize=14, fontweight="bold", y=1.02)
+    fig.tight_layout()
+    fig.savefig(output_path, dpi=150, bbox_inches="tight")
+    plt.close(fig)
+    print(f"Saved: {output_path}")
+
+
 def plot_paired_comparisons(analysis, output_path):
     """Plot ROI differences for each paired UX comparison."""
     pairs = analysis.get("paired_comparisons", {})
@@ -186,6 +328,32 @@ def main():
 
     plot_paired_comparisons(analysis, OUTPUT / "ux_paired_comparisons.png")
 
+    # === HIX Proxy Signals ===
+    print("\n=== Computing HIX Proxy Signals ===")
+    hix_all = compute_hix_for_all(results, roi_idx)
+
+    with open(OUTPUT / "hix_signals.json", "w") as f:
+        json.dump({
+            "signals": hix_all,
+            "signal_definitions": {k: {kk: vv for kk, vv in v.items()}
+                                   for k, v in HIX_SIGNALS.items()},
+        }, f, indent=2, default=str)
+
+    plot_hix_dashboard(hix_all, OUTPUT / "hix_dashboard.png")
+    plot_hix_paired(hix_all, OUTPUT / "hix_paired.png")
+
+    # Print HIX summary
+    print("\nHIX Signal Summary (selected conditions):")
+    for condition in ["clean_ui", "cluttered_ui", "flow_enabling", "flow_breaking",
+                      "dark_checkout", "honest_checkout"]:
+        if condition in hix_all:
+            sigs = hix_all[condition]
+            print(f"\n  {condition}:")
+            for sig, val in sorted(sigs.items()):
+                interp = HIX_SIGNALS[sig]["interpretation"]
+                print(f"    {sig:20s} = {val:+.4f}  ({interp})")
+
+    # === Original findings ===
     print("\n=== KEY FINDINGS ===")
     for label, data in analysis.get("paired_comparisons", {}).items():
         pct = data["activation_increase_pct"]
