@@ -21,7 +21,8 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+_root = Path(__file__).resolve().parents[2] if len(Path(__file__).resolve().parents) > 2 else Path(__file__).resolve().parent
+sys.path.insert(0, str(_root))
 from core.model import load_model, text_to_predictions, CACHE_FOLDER
 from core.roi import get_roi_indices, roi_means
 
