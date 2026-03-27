@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "brain-radio"
+version = "0.1.0"
+description = "Compare how different text lights up the brain using Meta's TRIBE v2"
+requires-python = ">=3.10"
+dependencies = [
+    "tribev2[plotting]",
+    "numpy",
+    "matplotlib",
+]
+
+[project.scripts]
+brain-radio = "brain_radio:main"
