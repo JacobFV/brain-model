@@ -93,23 +93,50 @@ Dark patterns increase engagement (attention hijacking) and flip the reward sign
 
 ## Experiment 3: Virtual EEG (40 stimuli, 8 categories)
 
-### Brain responses are remarkably low-dimensional
+### v2: Physically grounded virtual EEG (48 stimuli, 6 categories, LOOCV)
 
-**Only 8 PCA components explain 95% of variance** across all 20,484 cortical vertices. The brain's response to diverse stimuli (animals, music, food, danger, abstract thought, social, spatial, language) lives in a ~8-dimensional subspace.
+v1 was fundamentally flawed (learned compression ≠ EEG, tiny dataset, PCA artifact).
+v2 maps the **standard 10-20 electrode system** onto the fsaverage5 cortical mesh — each
+electrode samples a 10mm radius cortical patch (~30-58 vertices), giving a physically
+meaningful (n_timesteps, 20) signal per stimulus.
 
-### Classification from compressed "EEG"
+### Classification accuracy
 
-| Channels | Accuracy | vs Chance (12.5%) |
-|----------|----------|-------------------|
-| 4 | 37.5% | 3.0x |
-| 8 | 37.5% | 3.0x |
-| 16 | 37.5% | 3.0x |
-| 32 | 37.5% | 3.0x |
+| Signal | Accuracy | vs Chance (16.7%) |
+|--------|----------|-------------------|
+| Full cortex (20,484 vertices) | **56.2%** | Upper bound |
+| 20-ch EEG (10-20 system) | **45.8%** | 81.5% retention |
+| Temporal + Parietal (7 ch) | **52.1%** | Beats full 20-ch |
+| Frontal only (7 ch) | 37.5% | |
+| Best single electrode: F3 | 31.2% | Left frontal |
+| Occipital only (3 ch) | 18.8% | Barely above chance |
 
-Even 4 channels carry enough information to classify semantic category 3x above chance. The plateau at 37.5% is due to the very small dataset (40 samples, 8 test). With more data, higher channel counts would likely separate further.
+### Key finding: fewer electrodes in the right places beat more electrodes everywhere
+
+The **temporal-parietal subset** (T3, T4, T5, T6, P3, P4, Pz — just 7 electrodes)
+achieves **52.1%** accuracy, outperforming the full 20-channel montage (45.8%).
+Frontal and occipital electrodes add noise for semantic categorization. A minimal
+headset for content classification needs only these 7 electrodes.
+
+### Information loss: 20K vertices → 20 electrodes
+
+| Measure | Value |
+|---------|-------|
+| KL divergence (full ∥ interpolated) | **0.065 nats** — surprisingly low |
+| Reconstruction R² (mean) | **0.449** — 20 electrodes reconstruct ~45% of cortex variance |
+| Vertices with R² > 0.5 | **42.7%** — almost half well-predicted from 20 channels |
+| Vertices with R² < 0 | **0.1%** — almost no vertices are irrecoverable |
+| Classification retention | **81.5%** — most category information survives electrode sampling |
+
+### Single electrode ranking
+
+F3 (left frontal) is the most informative single electrode for semantic classification (31.2%),
+followed by F7 (left frontal-temporal, 25.0%) and C4 (right central, 22.9%).
+The left-hemisphere dominance is consistent with language processing lateralization —
+all stimuli are text-based, so left-hemisphere language circuits carry the most discriminative signal.
 
 ---
 
-## Experiments 4 & 5: Running...
+## Experiments 4 & 5: Consciousness Dynamics & Affective Intervention
 
-Consciousness dynamics and affective intervention experiments are currently executing on Modal GPUs. Results will be appended when complete.
+Currently executing on Modal GPUs. Results will be appended when complete.
