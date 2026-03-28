@@ -36,10 +36,12 @@ image = (
     .apt_install("ffmpeg", "libsndfile1", "git", "libgl1", "libglib2.0-0", "libxrender1")
     .pip_install("torch", "torchaudio")
     .run_commands("pip install git+https://github.com/facebookresearch/tribev2.git")
+    .run_commands("python -m spacy download en_core_web_lg")  # pre-bake spacy model
     .pip_install(
         "gtts", "langdetect", "soundfile", "matplotlib",
         "nilearn", "pyvista", "vtk", "colorcet", "seaborn",
         "scikit-image", "scikit-learn", "Pillow",
+        "transformers>=4.45,<4.50",  # pin for LLaMA 3.2 compat
     )
 )
 
