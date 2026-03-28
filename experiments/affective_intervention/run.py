@@ -64,11 +64,8 @@ INITIAL_CONDITIONS = {
     "resting": "You are sitting quietly in a comfortable chair with your eyes closed, breathing slowly, thinking of nothing in particular.",
     "anxious": "Your heart is racing. The exam is in one hour and you haven't studied enough. Your mind keeps jumping between topics, unable to focus.",
     "angry": "Someone just cut in front of you in line after you waited forty minutes. They pretended not to see you. Your jaw is clenched.",
-    "sad": "You just watched the last person leave the funeral. The house is empty. Everything is too quiet.",
     "excited": "You just got the call. You got the job. You want to tell everyone. Your body is buzzing with energy.",
-    "bored": "The meeting has been going on for two hours. Someone is reading from a spreadsheet. You've counted the ceiling tiles three times.",
     "focused_work": "You are deep in a coding problem, the solution almost within reach. Your attention is narrow and intense.",
-    "daydreaming": "You're staring out the window at clouds drifting past. Your mind wanders freely between half-formed thoughts and memories.",
 }
 
 # ── Candidate entrainment stimuli ─────────────────────────────────────────
@@ -78,8 +75,6 @@ ENTRAINMENT_CANDIDATES = {
     "body_scan": "Notice your feet on the ground. Feel their weight. Now move your attention to your ankles. Your calves. Feel the chair beneath your thighs. Your hands resting in your lap. Your shoulders. Let each part of your body relax as you notice it.",
     "counting_anchor": "Count backwards from ten. Ten. Nine. Eight. With each number, let your thoughts settle. Seven. Six. Five. Feel your mind becoming clearer. Four. Three. Two. One. Now you are here, fully present, ready.",
     "sensory_ground": "Notice five things you can see. Four things you can touch. Three things you can hear. Two things you can smell. One thing you can taste. You are anchored in the present moment through your senses.",
-    "story_hook": "Imagine a door. It is old and wooden, painted blue, with a brass handle worn smooth by a thousand hands. Behind it is a room you have never seen but somehow remember. You reach for the handle.",
-    "rhythm_entrain": "Tap. Tap. Tap. A steady rhythm, like a heartbeat. One beat per second. Let your breathing synchronize. Let your thoughts synchronize. The rhythm is all there is. Tap. Tap. Tap. Everything else fades.",
 }
 
 

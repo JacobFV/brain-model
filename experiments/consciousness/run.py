@@ -96,7 +96,7 @@ TRAJECTORIES = {
 class BrainDynamicsModel(nn.Module):
     """Predict brain state at t+1 from brain state at t (and optionally t-1, t-2...)."""
 
-    def __init__(self, n_vertices: int = 20484, hidden: int = 512, context_steps: int = 3):
+    def __init__(self, n_vertices: int = 20484, hidden: int = 256, context_steps: int = 2):
         super().__init__()
         self.context_steps = context_steps
         self.encoder = nn.Sequential(
@@ -129,7 +129,7 @@ def prepare_dynamics_data(trajectories: dict[str, np.ndarray], context_steps: in
     return np.stack(X_list), np.stack(y_list), traj_labels
 
 
-def train_dynamics_model(X, y, n_vertices, context_steps=3, n_epochs=500):
+def train_dynamics_model(X, y, n_vertices, context_steps=3, n_epochs=200):
     """Train brain dynamics prediction model."""
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -302,7 +302,7 @@ def main():
 
     # Train dynamics model
     print("\n=== Training forward dynamics model ===")
-    context_steps = 3
+    context_steps = 2
     n_vertices = next(iter(trajectories.values())).shape[1]
     X, y, labels = prepare_dynamics_data(trajectories, context_steps=context_steps)
     print(f"Training data: {X.shape[0]} samples, context={context_steps} steps")
