@@ -61,7 +61,7 @@ def render_pair_brains(results, good, bad, title, output_path):
 
     fig, axes = plt.subplots(2, 3, figsize=(18, 11), subplot_kw={"projection": "3d"})
 
-    views = ["left", "right", "top"]
+    views = ["left", "right", "dorsal"]
     for j, view in enumerate(views):
         plotter.plot_surf(good_act, axes=[axes[0, j]], views=[view], cmap="hot", vmin=vmin, vmax=vmax)
         plotter.plot_surf(bad_act, axes=[axes[1, j]], views=[view], cmap="hot", vmin=vmin, vmax=vmax)
@@ -94,7 +94,7 @@ def render_diff_brain(results, good, bad, title, output_path):
 
     fig, axes = plt.subplots(1, 3, figsize=(20, 6), subplot_kw={"projection": "3d"})
 
-    views = ["left", "right", "top"]
+    views = ["left", "right", "dorsal"]
     for j, view in enumerate(views):
         plotter.plot_surf(diff, axes=[axes[j]], views=[view], cmap="bwr",
                           norm_percentile=97, symmetric_cbar=True)

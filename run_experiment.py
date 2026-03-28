@@ -39,7 +39,7 @@ image = (
     .pip_install(
         "gtts", "langdetect", "soundfile", "matplotlib",
         "nilearn", "pyvista", "vtk", "colorcet", "seaborn",
-        "scikit-image", "scikit-learn",
+        "scikit-image", "scikit-learn", "Pillow",
     )
 )
 
@@ -85,14 +85,11 @@ def run(experiment_name: str, extra_args: str = "", gpu: str = "A10G"):
         if local_output.exists():
             for f in local_output.glob("*.npz"):
                 print(f"Uploading {f.name} ({f.stat().st_size // 1024} KB)...")
-                encoded = base64.b64encode(f.read_bytes()).decode()
-                # Split large files into chunks to avoid shell argument limits
-                chunk_size = 500_000  # ~500KB base64 chunks
-                sb.exec("bash", "-c", f"rm -f /work/output/{f.name}.b64").wait()
-                for i in range(0, len(encoded), chunk_size):
-                    chunk = encoded[i:i + chunk_size]
-                    sb.exec("bash", "-c", f"echo -n '{chunk}' >> /work/output/{f.name}.b64").wait()
-                sb.exec("bash", "-c", f"base64 -d /work/output/{f.name}.b64 > /work/output/{f.name} && rm /work/output/{f.name}.b64").wait()
+                remote_path = f"/work/output/{f.name}"
+                fh = sb.open(remote_path, "wb")
+                fh.write(f.read_bytes())
+                fh.close()
+                print(f"  Uploaded {f.name}")
 
         # Run
         cmd = f"cd /work && python run.py {extra_args}"
