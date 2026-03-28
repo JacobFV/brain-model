@@ -1,0 +1,45 @@
+{
+  "final_test_mse": 0.0027082914020866156,
+  "baseline_mse": 0.004757551476359367,
+  "improvement_pct": 43.07383923128694,
+  "context_steps": 2,
+  "n_training_samples": 70,
+  "trajectory_analysis": {
+    "story_arc": {
+      "n_timesteps": 16,
+      "mean_autocorrelation": 0.9604423774297552,
+      "min_autocorrelation": 0.86438073521107,
+      "effective_dimensionality": 4,
+      "mean_velocity": 6.7799201011657715,
+      "max_velocity": 13.101000785827637,
+      "max_velocity_timestep": 14
+    },
+    "escalating_tension": {
+      "n_timesteps": 19,
+      "mean_autocorrelation": 0.9684979832758894,
+      "min_autocorrelation": 0.8818233905603203,
+      "effective_dimensionality": 4,
+      "mean_velocity": 6.169489860534668,
+      "max_velocity": 11.266850471496582,
+      "max_velocity_timestep": 16
+    },
+    "sensory_sequence": {
+      "n_timesteps": 19,
+      "mean_autocorrelation": 0.964449395528826,
+      "min_autocorrelation": 0.8635541636940669,
+      "effective_dimensionality": 4,
+      "mean_velocity": 6.024616718292236,
+      "max_velocity": 13.426280975341797,
+      "max_velocity_timestep": 0
+    },
+    "mundane_routine": {
+      "n_timesteps": 24,
+      "mean_autocorrelation": 0.9598043917389647,
+      "min_autocorrelation": 0.7861795332903042,
+      "effective_dimensionality": 5,
+      "mean_velocity": 6.31446647644043,
+      "max_velocity": 14.521978378295898,
+      "max_velocity_timestep": 22
+    }
+  }
+}
