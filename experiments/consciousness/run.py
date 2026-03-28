@@ -35,61 +35,10 @@ OUTPUT.mkdir(parents=True, exist_ok=True)
 
 # Long-form stimuli that produce multi-timestep trajectories
 TRAJECTORIES = {
-    "story_arc": """
-        It was a quiet morning when the letter arrived. At first she thought it was junk mail.
-        But the envelope was heavy, cream-colored, with her name in calligraphy. Inside was
-        an invitation to a place she had only dreamed about. Her hands trembled as she read
-        the details. She would need to leave everything behind. The choice was impossible and
-        inevitable. She packed a single bag and walked out the door without looking back.
-        The train carried her through landscapes she had never imagined. Mountains gave way
-        to desert gave way to ocean. When she finally arrived, she understood why she had
-        been chosen. The place was not a destination but a mirror, and in it she saw the person
-        she had always been but never had the courage to become.
-    """,
-    "escalating_tension": """
-        The footsteps started on the floor above. Slow, measured, deliberate. Then they stopped.
-        Silence. The lights flickered once. The footsteps resumed, closer now, on the stairs.
-        Each step creaked under weight. I held my breath. The hallway light went dark. The
-        footsteps reached the landing. A long pause. Then the doorknob turned, slowly, testing.
-        I pressed my back against the wall. The door opened an inch. Two inches. A shadow
-        spilled across the floor. And then a voice, soft and familiar, said my name.
-    """,
-    "philosophical_journey": """
-        Consider this: you have never experienced the present moment. By the time your neurons
-        fire and your consciousness registers what is happening, the moment has already passed.
-        You live perpetually in the recent past, a reconstruction assembled by your brain from
-        fragmentary signals. And yet this reconstruction feels seamless, immediate, real. Your
-        brain is the most sophisticated storyteller in the universe, narrating reality to you
-        in real time, and you have never once questioned the narrator. Until now.
-        What if you could step outside the story? What if you could see the raw data before
-        your brain interprets it? Would it look like anything at all?
-    """,
-    "sensory_sequence": """
-        First, the smell of pine needles warmed by afternoon sun. Then the sound of a stream
-        tumbling over smooth stones. The feel of cool water on bare feet. A flash of blue as
-        a kingfisher dives. The taste of wild blackberries, tart and sweet, staining your
-        fingers purple. The crunch of dry leaves underfoot as the trail climbs. Wind carrying
-        the scent of rain from the west. Thunder, still far away. The first cold drops on
-        warm skin. And then the downpour, all senses overwhelmed at once.
-    """,
-    "mathematical_beauty": """
-        Euler's identity connects five fundamental constants in a single equation of impossible
-        elegance: e to the power of i times pi, plus one, equals zero. The base of natural
-        logarithms, the imaginary unit, the ratio of a circle to its diameter, the multiplicative
-        identity, and the additive identity, all woven together in a statement that is not just
-        true but somehow beautiful, as if mathematics itself has an aesthetic dimension that
-        transcends human invention. Mathematicians have called it the most beautiful equation
-        ever written. It suggests a deep structure to reality that we can glimpse but not
-        fully comprehend.
-    """,
-    "mundane_routine": """
-        Monday morning. The alarm goes off at six thirty. Snooze. It goes off again at six
-        thirty-nine. Get up. Shower. Brush teeth. Coffee. Check email. Nothing urgent. Toast
-        with butter. Put on shoes. Lock the door. Walk to the station. Same platform, same
-        spot. Train arrives. Stand for twenty minutes. Get off. Walk four blocks. Badge in.
-        Elevator to the third floor. Sit down. Turn on computer. Wait for it to boot. Open
-        the same five tabs as yesterday.
-    """,
+    "story_arc": "It was a quiet morning when the letter arrived. Inside was an invitation to a place she had only dreamed about. She packed a single bag and walked out without looking back. The train carried her through mountains and desert and ocean.",
+    "escalating_tension": "The footsteps started on the floor above. Slow and deliberate. The lights flickered. The footsteps resumed, closer now, on the stairs. The hallway light went dark. The doorknob turned slowly. The door opened. A shadow spilled across the floor.",
+    "sensory_sequence": "First the smell of pine needles in warm sun. Then the sound of a stream over stones. Cool water on bare feet. Wild blackberries, tart and sweet. Dry leaves crunching underfoot. Wind carrying the scent of rain. Thunder far away. Then the downpour.",
+    "mundane_routine": "Monday morning. Alarm at six thirty. Snooze. Get up. Shower. Coffee. Check email. Nothing urgent. Toast with butter. Lock the door. Walk to the station. Train arrives. Stand for twenty minutes. Badge in. Sit down. Turn on computer. Same five tabs as yesterday.",
 }
 
 
