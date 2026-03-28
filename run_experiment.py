@@ -28,6 +28,7 @@ EXPERIMENTS = {
     "consciousness": "experiments/consciousness/run.py",
     "affective_intervention": "experiments/affective_intervention/run.py",
     "brain_radio": "experiments/brain_radio/brain_radio.py",
+    "brain_ux_render": "experiments/brain_ux/render_brains.py",
 }
 
 image = (
@@ -78,6 +79,20 @@ def run(experiment_name: str, extra_args: str = "", gpu: str = "A10G"):
         # Upload experiment script
         encoded = base64.b64encode(script_path.read_bytes()).decode()
         sb.exec("bash", "-c", f"echo '{encoded}' | base64 -d > /work/run.py").wait()
+
+        # Upload any pre-existing output data the script might need (e.g. render scripts)
+        local_output = Path(f"output/{experiment_name.split('_render')[0]}")
+        if local_output.exists():
+            for f in local_output.glob("*.npz"):
+                print(f"Uploading {f.name} ({f.stat().st_size // 1024} KB)...")
+                encoded = base64.b64encode(f.read_bytes()).decode()
+                # Split large files into chunks to avoid shell argument limits
+                chunk_size = 500_000  # ~500KB base64 chunks
+                sb.exec("bash", "-c", f"rm -f /work/output/{f.name}.b64").wait()
+                for i in range(0, len(encoded), chunk_size):
+                    chunk = encoded[i:i + chunk_size]
+                    sb.exec("bash", "-c", f"echo -n '{chunk}' >> /work/output/{f.name}.b64").wait()
+                sb.exec("bash", "-c", f"base64 -d /work/output/{f.name}.b64 > /work/output/{f.name} && rm /work/output/{f.name}.b64").wait()
 
         # Run
         cmd = f"cd /work && python run.py {extra_args}"
