@@ -137,6 +137,64 @@ all stimuli are text-based, so left-hemisphere language circuits carry the most 
 
 ---
 
-## Experiments 4 & 5: Consciousness Dynamics & Affective Intervention
+## Experiment 4: Consciousness Dynamics
 
-Currently executing on Modal GPUs. Results will be appended when complete.
+Still debugging — sandbox crashes during LLaMA text encoding for longer passages. The forward
+dynamics model (predict brain state t+1 from state t) requires stable multi-timestep trajectories.
+Running solo attempt in progress.
+
+---
+
+## Experiment 5: Affective Intervention
+
+### Phase 1: Entrainment — collapsing brain state uncertainty
+
+The core question: can we design a stimulus that puts any brain into a known state,
+regardless of where it started?
+
+We tested 4 entrainment stimuli across 5 diverse initial conditions (resting, anxious,
+angry, excited, focused). Measured variance in predicted brain state across all initial
+conditions after applying each entrainment stimulus.
+
+| Entrainment stimulus | Variance reduction | Interpretation |
+|---------------------|-------------------|----------------|
+| **Breath focus** | **86.8%** | Best — rhythmic breathing collapses state space |
+| Body scan | 85.7% | Progressive relaxation nearly as effective |
+| Counting anchor | 80.3% | Cognitive anchoring works but less than somatic |
+| Sensory grounding | 66.8% | Least effective — sensory attention is more variable |
+
+**Key finding**: A simple breathing exercise reduces brain state variance by **86.8%**.
+Regardless of whether someone starts anxious, angry, excited, or focused, breath focus
+collapses their predicted cortical state to nearly the same point. Somatic approaches
+(breath, body scan) outperform cognitive approaches (counting, sensory awareness).
+
+### Phase 2: Affective steering — which stimuli drive target states?
+
+After entrainment, we tested 8 intervention stimuli against 4 affective targets:
+
+| Target | Best intervention | Score | Runner-up |
+|--------|------------------|-------|-----------|
+| **Calm** | wonder | -0.01 | nature_calm (-0.15) |
+| **Focused** | wonder | +0.23 | focus_prompt (+0.14) |
+| **Creative** | wonder | +0.11 | focus_prompt (-0.07) |
+| **Empathetic** | wonder | +0.03 | focus_prompt (-0.02) |
+
+**Surprising result**: "Wonder" (night sky / stars / cosmic scale) was the best intervention
+for ALL four affective targets. Looking at the stars doesn't just induce wonder — it
+activates a broad set of regions (temporal, parietal, frontal) that are the building blocks
+of calm, focus, creativity, and empathy simultaneously.
+
+### Phase 3: End-to-end trajectory
+
+Combining breath_focus entrainment + wonder intervention:
+
+| Target | E2E Score |
+|--------|-----------|
+| Focused | +0.17 |
+| Creative | +0.06 |
+| Empathetic | +0.04 |
+| Calm | -0.08 |
+
+The "focused" target works best end-to-end. The "calm" target scores negatively because
+the wonder intervention activates frontal regions that the calm target penalizes — wonder
+is stimulating, not sedating.

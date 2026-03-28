@@ -1,0 +1,95 @@
+{
+  "entrainment_results": {
+    "breath_focus": {
+      "total_variance": 12.376448631286621,
+      "variance_reduction_pct": 86.8
+    },
+    "body_scan": {
+      "total_variance": 13.400859832763672,
+      "variance_reduction_pct": 85.71
+    },
+    "counting_anchor": {
+      "total_variance": 18.464916229248047,
+      "variance_reduction_pct": 80.31
+    },
+    "sensory_ground": {
+      "total_variance": 31.174503326416016,
+      "variance_reduction_pct": 66.76
+    }
+  },
+  "best_entrainment": "breath_focus",
+  "affective_targets": {
+    "calm": {
+      "Cingulate post.": 1.0,
+      "Precuneus": 0.8,
+      "Frontal sup.": 0.3,
+      "Temporal mid.": 0.2,
+      "Insula": -0.5,
+      "Motor": -0.3
+    },
+    "focused": {
+      "Frontal sup.": 1.0,
+      "Frontal mid.": 0.8,
+      "Broca's area": 0.6,
+      "Angular/TPJ": 0.4,
+      "Precuneus": -0.3,
+      "Temporal pole": -0.2
+    },
+    "creative": {
+      "Angular/TPJ": 1.0,
+      "Precuneus": 0.8,
+      "Temporal mid.": 0.7,
+      "Frontal mid.": 0.5,
+      "Cingulate ant.": 0.4
+    },
+    "empathetic": {
+      "Angular/TPJ": 1.0,
+      "Insula": 0.9,
+      "Cingulate ant.": 0.8,
+      "Temporal pole": 0.7,
+      "Frontal sup.": 0.4
+    }
+  },
+  "affective_scores": {
+    "calm": {
+      "guided_relaxation": -0.2967234173789621,
+      "focus_prompt": -0.21066760122776032,
+      "creative_spark": -0.35044507624115795,
+      "empathy_bridge": -0.2636910891509615,
+      "nature_calm": -0.14729100184049457,
+      "energize": -0.18505379017442464,
+      "wonder": -0.014862269349396232,
+      "gratitude": -0.3146744690835476
+    },
+    "focused": {
+      "guided_relaxation": 0.055303721129894255,
+      "focus_prompt": 0.13876650705933571,
+      "creative_spark": 0.12455060645006596,
+      "empathy_bridge": 0.1011217919178307,
+      "nature_calm": 0.01879126410931349,
+      "energize": 0.1197814829647541,
+      "wonder": 0.22888901729602368,
+      "gratitude": 0.03164401957765221
+    },
+    "creative": {
+      "guided_relaxation": -0.22195036448538305,
+      "focus_prompt": -0.07464592698961496,
+      "creative_spark": -0.2578701363410801,
+      "empathy_bridge": -0.18902315502928105,
+      "nature_calm": -0.14549529738724232,
+      "energize": -0.07712983535602688,
+      "wonder": 0.1077565124258399,
+      "gratitude": -0.2869231319054961
+    },
+    "empathetic": {
+      "guided_relaxation": -0.11483570970594882,
+      "focus_prompt": -0.01850067563354968,
+      "creative_spark": -0.1354827744886279,
+      "empathy_bridge": -0.12510878560133276,
+      "nature_calm": -0.1701706337975338,
+      "energize": -0.048051667213439925,
+      "wonder": 0.03129623457789424,
+      "gratitude": -0.1923846984282136
+    }
+  }
+}
