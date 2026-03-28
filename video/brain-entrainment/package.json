@@ -1,0 +1,26 @@
+{
+  "name": "brain-entrainment",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@remotion/cli": "^4.0.441",
+    "@remotion/player": "^4.0.441",
+    "@remotion/tailwind": "^4.0.441",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "openai": "^6.33.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "remotion": "^4.0.441",
+    "tailwindcss": "^4.2.2",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.2"
+  }
+}

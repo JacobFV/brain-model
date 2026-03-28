@@ -1,0 +1,54 @@
+{
+  "title": "How to Hack Your Brain Into a Predictable State",
+  "fps": 30,
+  "segments": [
+    {
+      "id": "hook",
+      "startSec": 0,
+      "endSec": 5,
+      "text": "What if I told you a sixty-second breathing exercise can collapse eighty-seven percent of your brain's uncertainty?"
+    },
+    {
+      "id": "setup",
+      "startSec": 5,
+      "endSec": 12,
+      "text": "We ran Meta's new brain model on five completely different mental states — anxious, angry, excited, focused, and resting — and measured the variance."
+    },
+    {
+      "id": "problem",
+      "startSec": 12,
+      "endSec": 18,
+      "text": "Without any intervention, the brain states are wildly different. Ninety-one units of variance. Every brain is doing its own thing."
+    },
+    {
+      "id": "solution",
+      "startSec": 18,
+      "endSec": 28,
+      "text": "Then we tested four entrainment techniques. Breath focus, body scan, counting, and sensory grounding. Breath focus crushed it. Eighty-seven percent variance reduction. Every brain converged to nearly the same state."
+    },
+    {
+      "id": "why",
+      "startSec": 28,
+      "endSec": 36,
+      "text": "Somatic approaches beat cognitive ones. Your body is a better remote control for your brain than your thoughts are. Body scan got eighty-six percent. Counting only eighty."
+    },
+    {
+      "id": "wonder",
+      "startSec": 36,
+      "endSec": 46,
+      "text": "But here's the wildest part. Once the brain is in a known state, the best stimulus to steer it toward ANY target — calm, focus, creativity, empathy — was wonder. Looking at the stars activates everything."
+    },
+    {
+      "id": "dynamics",
+      "startSec": 46,
+      "endSec": 54,
+      "text": "We also found that brain dynamics during any stimulus live on a four-dimensional manifold. Twenty thousand measurements, four degrees of freedom. Your brain's trajectory is shockingly low-dimensional."
+    },
+    {
+      "id": "cta",
+      "startSec": 54,
+      "endSec": 62,
+      "text": "So next time you need to reset — breathe, then look up at the sky. Your brain will thank you. Link in bio for the full paper."
+    }
+  ]
+}
