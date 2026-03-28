@@ -1,0 +1,84 @@
+{
+  "title": "Your Brain on Bad UX",
+  "fps": 30,
+  "durationSec": 58,
+  "segments": [
+    {
+      "id": "hook",
+      "type": "broll",
+      "startSec": 0,
+      "endSec": 5,
+      "text": "What if you could literally see what bad design does to your brain?",
+      "visual": "brain_ux_hero.png"
+    },
+    {
+      "id": "intro_face",
+      "type": "aroll",
+      "startSec": 5,
+      "endSec": 10,
+      "text": "We used Meta's new brain model to simulate fMRI scans for different UI experiences."
+    },
+    {
+      "id": "clean_vs_cluttered_ui",
+      "type": "broll",
+      "startSec": 10,
+      "endSec": 17,
+      "text": "Clean UI versus cluttered UI. Same task, completely different brain activation. The cluttered version makes your frontal cortex work overtime.",
+      "visual": "brain_clean_ui_vs_cluttered_ui.png",
+      "mockupLeft": "mock_clean_ui",
+      "mockupRight": "mock_cluttered_ui"
+    },
+    {
+      "id": "dark_patterns",
+      "type": "broll",
+      "startSec": 17,
+      "endSec": 26,
+      "text": "But here's the wild part. Dark checkout patterns actually flip your brain's reward signal positive. Pre-checked add-ons and exclusive deals hijack your reward circuit even while manipulating you.",
+      "visual": "brain_honest_checkout_vs_dark_checkout.png",
+      "mockupLeft": "mock_honest_checkout",
+      "mockupRight": "mock_dark_checkout"
+    },
+    {
+      "id": "dark_explain_face",
+      "type": "aroll",
+      "startSec": 26,
+      "endSec": 31,
+      "text": "That's the neural mechanism dark patterns exploit. Your brain literally rewards you for being tricked."
+    },
+    {
+      "id": "flow_state",
+      "type": "broll",
+      "startSec": 31,
+      "endSec": 39,
+      "text": "Flow-breaking UI doubles your cognitive load. Constant interruptions, slow autocomplete — your brain fights to stay focused. High engagement, but it's struggle, not flow.",
+      "visual": "rotating_diff_flow_enabling_vs_flow_breaking.gif",
+      "mockupLeft": "mock_flow_enabling",
+      "mockupRight": "mock_flow_breaking"
+    },
+    {
+      "id": "errors",
+      "type": "broll",
+      "startSec": 39,
+      "endSec": 46,
+      "text": "And cryptic errors? They collapse your brain's spatial clarity. You literally lose your sense of where you are in the interface.",
+      "visual": "brain_helpful_error_vs_cryptic_error_diff.png",
+      "mockupLeft": "mock_helpful_error",
+      "mockupRight": "mock_cryptic_error"
+    },
+    {
+      "id": "signals_face",
+      "type": "aroll",
+      "startSec": 46,
+      "endSec": 51,
+      "text": "We derived eight brain signals — cognitive load, frustration, flow, trust — that could power autonomous UI design."
+    },
+    {
+      "id": "closing",
+      "type": "broll",
+      "startSec": 51,
+      "endSec": 58,
+      "text": "Bad UX doesn't just annoy you. It measurably disrupts your brain. Good design is literally brain-friendly design.",
+      "visual": "hix_dashboard.png"
+    }
+  ]
+}
