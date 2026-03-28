@@ -295,6 +295,156 @@ def plot_eeg_traces(eeg_temporal, labels, category_names, output_path):
     print(f"Saved: {output_path}")
 
 
+def measure_information_loss(X_eeg, X_raw, y, patches, electrode_names):
+    """
+    Measure how much information is lost going from 20K vertices to 20 electrodes.
+
+    Three complementary approaches:
+    1. KL divergence: Treat per-stimulus vertex activations as probability distributions.
+       Compare full distribution vs electrode-interpolated distribution.
+    2. Reconstruction R²: How well can we reconstruct each vertex from 20 electrodes?
+       (Linear regression from electrodes → full cortex)
+    3. Mutual information proxy: Classification accuracy ratio as an MI bound.
+    """
+    from scipy.special import kl_div, rel_entr
+    from sklearn.linear_model import Ridge
+    from sklearn.model_selection import LeaveOneOut, cross_val_predict
+
+    n_vertices = X_raw.shape[1]
+    n_samples = X_raw.shape[0]
+
+    # --- 1. KL divergence: spatial distribution ---
+    # For each stimulus, normalize vertex activations to a probability distribution
+    # Then compare full dist vs electrode-interpolated dist
+    kl_per_stimulus = []
+    for i in range(n_samples):
+        full = X_raw[i]
+
+        # Reconstruct from electrodes: nearest-electrode interpolation
+        # For each vertex, assign the value of its nearest electrode
+        # Build vertex → nearest electrode mapping
+        recon = np.zeros(n_vertices)
+        # Get electrode center positions (mean of patch vertices)
+        for j, name in enumerate(electrode_names):
+            patch_idx = patches[name]
+            recon[patch_idx] = X_eeg[i, j]
+        # For vertices not in any patch, use nearest patch
+        uncovered = np.where(recon == 0)[0]
+        if len(uncovered) > 0:
+            # Assign to global mean (conservative)
+            recon[uncovered] = X_eeg[i].mean()
+
+        # Shift to positive (KL needs positive values)
+        full_shifted = full - full.min() + 1e-10
+        recon_shifted = recon - recon.min() + 1e-10
+
+        # Normalize to probability distributions
+        p = full_shifted / full_shifted.sum()
+        q = recon_shifted / recon_shifted.sum()
+
+        # KL(P || Q) — how many bits lost
+        kl = float(np.sum(rel_entr(p, q)))
+        kl_per_stimulus.append(kl)
+
+    mean_kl = float(np.mean(kl_per_stimulus))
+    print(f"  KL divergence (full || electrode-interpolated): {mean_kl:.4f} nats (mean over {n_samples} stimuli)")
+    print(f"    Range: [{min(kl_per_stimulus):.4f}, {max(kl_per_stimulus):.4f}]")
+
+    # --- 2. Reconstruction R²: predict each vertex from 20 electrodes ---
+    # Use Ridge regression with LOOCV
+    ridge = Ridge(alpha=1.0)
+    y_pred_all = cross_val_predict(ridge, X_eeg, X_raw, cv=LeaveOneOut())
+
+    # Per-vertex R²
+    ss_res = np.sum((X_raw - y_pred_all) ** 2, axis=0)
+    ss_tot = np.sum((X_raw - X_raw.mean(axis=0)) ** 2, axis=0)
+    r2_per_vertex = 1 - ss_res / (ss_tot + 1e-10)
+    r2_per_vertex = np.clip(r2_per_vertex, -1, 1)  # can be negative for bad fits
+
+    mean_r2 = float(r2_per_vertex.mean())
+    median_r2 = float(np.median(r2_per_vertex))
+    pct_well_predicted = float((r2_per_vertex > 0.5).mean() * 100)
+    pct_poorly_predicted = float((r2_per_vertex < 0).mean() * 100)
+
+    print(f"  Reconstruction R² (20 electrodes → 20K vertices):")
+    print(f"    Mean R²:    {mean_r2:.4f}")
+    print(f"    Median R²:  {median_r2:.4f}")
+    print(f"    R² > 0.5:   {pct_well_predicted:.1f}% of vertices")
+    print(f"    R² < 0:     {pct_poorly_predicted:.1f}% of vertices (worse than mean)")
+
+    # --- 3. Classification accuracy as MI proxy ---
+    # I(category; signal) ≥ accuracy * log(n_categories) - H(accuracy)
+    # Ratio of EEG accuracy to full accuracy is a practical information retention measure
+    acc_full = evaluate_with_loocv(X_raw, y, name="(full cortex for ratio)")
+    acc_eeg = evaluate_with_loocv(X_eeg, y, name="(EEG for ratio)")
+    if acc_full > 0:
+        retention = acc_eeg / acc_full
+    else:
+        retention = 0
+    print(f"  Classification accuracy retention: {retention:.1%} (EEG/full)")
+
+    return {
+        "kl_divergence_mean": mean_kl,
+        "kl_divergence_per_stimulus": kl_per_stimulus,
+        "reconstruction_r2_mean": mean_r2,
+        "reconstruction_r2_median": median_r2,
+        "reconstruction_r2_per_vertex": r2_per_vertex,
+        "pct_vertices_r2_above_0.5": pct_well_predicted,
+        "pct_vertices_r2_below_0": pct_poorly_predicted,
+        "classification_retention": retention,
+        "acc_full": acc_full,
+        "acc_eeg": acc_eeg,
+    }
+
+
+def plot_information_loss(info_loss, output_path):
+    """Plot the information loss analysis results."""
+    fig, axes = plt.subplots(1, 3, figsize=(18, 5))
+
+    # 1. KL divergence histogram
+    kl_vals = info_loss["kl_divergence_per_stimulus"]
+    axes[0].hist(kl_vals, bins=15, color="#3498db", edgecolor="white")
+    axes[0].axvline(info_loss["kl_divergence_mean"], color="red", linestyle="--",
+                    label=f"Mean: {info_loss['kl_divergence_mean']:.3f}")
+    axes[0].set_xlabel("KL divergence (nats)")
+    axes[0].set_ylabel("# stimuli")
+    axes[0].set_title("KL(full || electrode-interpolated)\nper stimulus", fontweight="bold")
+    axes[0].legend()
+
+    # 2. R² distribution across vertices
+    r2 = info_loss["reconstruction_r2_per_vertex"]
+    axes[1].hist(r2, bins=50, color="#2ecc71", edgecolor="white")
+    axes[1].axvline(info_loss["reconstruction_r2_mean"], color="red", linestyle="--",
+                    label=f"Mean: {info_loss['reconstruction_r2_mean']:.3f}")
+    axes[1].axvline(0, color="black", linewidth=0.5)
+    axes[1].set_xlabel("R² (per vertex)")
+    axes[1].set_ylabel("# vertices")
+    axes[1].set_title("Reconstruction R²\n20 electrodes → 20K vertices", fontweight="bold")
+    axes[1].legend()
+
+    # 3. Classification retention bar
+    bars = axes[2].bar(
+        ["Full cortex\n(20,484 vertices)", "20-ch EEG\n(10-20 system)"],
+        [info_loss["acc_full"], info_loss["acc_eeg"]],
+        color=["#2ecc71", "#3498db"],
+        edgecolor="white",
+    )
+    axes[2].set_ylabel("LOOCV Accuracy")
+    axes[2].set_title(f"Classification: {info_loss['classification_retention']:.0%} retention", fontweight="bold")
+    axes[2].axhline(1/6, color="red", linestyle="--", label="Chance")
+    axes[2].legend()
+    for bar, val in zip(bars, [info_loss["acc_full"], info_loss["acc_eeg"]]):
+        axes[2].text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.01,
+                     f"{val:.1%}", ha="center", fontweight="bold")
+
+    fig.suptitle("Information Loss: 20K Cortical Vertices → 20 EEG Electrodes",
+                 fontsize=14, fontweight="bold", y=1.03)
+    fig.tight_layout()
+    fig.savefig(output_path, dpi=150, bbox_inches="tight")
+    plt.close(fig)
+    print(f"Saved: {output_path}")
+
+
 def main():
     model = load_model()
 
@@ -362,10 +512,15 @@ def main():
         above_chance = "***" if score > chance * 2 else "**" if score > chance * 1.5 else "*" if score > chance else ""
         print(f"  {name:>4s} ({region:>20s}): {score:.1%} {above_chance}")
 
+    # === Information loss analysis ===
+    print("\n=== Information loss: 20 electrodes vs 20K vertices ===")
+    info_loss = measure_information_loss(X_mean, X_raw, y, patches, electrode_names)
+
     # === Plots ===
     print("\n=== Generating plots ===")
     plot_electrode_importance(single_scores, OUTPUT / "electrode_importance.png")
     plot_eeg_traces(eeg_temporal, y, category_names, OUTPUT / "eeg_traces.png")
+    plot_information_loss(info_loss, OUTPUT / "information_loss.png")
 
     # === Summary ===
     summary = {
@@ -385,6 +540,7 @@ def main():
             "occipital_only": acc_occ,
         },
         "single_electrode_scores": single_scores,
+        "information_loss": {k: v for k, v in info_loss.items() if not isinstance(v, np.ndarray)},
     }
     with open(OUTPUT / "virtual_eeg_summary.json", "w") as f:
         json.dump(summary, f, indent=2)
