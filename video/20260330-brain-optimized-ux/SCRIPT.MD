@@ -1,0 +1,1 @@
+So Meta recently released v2 of their fMRI scan prediction neural network TRIBE, and what it does is 
