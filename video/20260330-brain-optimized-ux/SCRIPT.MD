@@ -27,11 +27,40 @@
 So Meta recently released v2 of their fMRI scan prediction neural network TRIBE.
 
 [close]
-fMRIs are these scans that show where in the brain blood is moving around and the TRIBEv2 is a neural network that predicts how 20,000 different points on your brain will be activated by visual, audio, and text stimuli.
+fMRIs are these scans that show where in the brain blood is moving around and the TRIBEv2 is a neural network that predicts how 20,000 different points in these brain scans are activated by visual, audio, and text stimuli.
 
 <!-- VIEWER FEELING: "ok, that's a wild capability. what did he do with it?" -->
 
-[overlay: face bottom-right, screen filling rest — terminal running, brain images rendering in real-time, progress bars, heatmaps appearing]
+[overlay: face bottom-right, screen filling rest — terminal running, brain images rendering in real-time, heatmaps appearing, image or text stimulii on the left corresponding to what experiments i am mentioning]
+
+for example you can watch the reward system light up when it sees food. or [TODO: write another example]. basically, you can replicate alot of the classical experiments in simulation now.
+
+but something it also unlocks is that we can observe the regions of the brain predicted to be activated by various user experiences and then [speak with emphasis] directly optimize the user interface that maximally activate those:
+
+[show phone screen recording on left and brain activation on right]
+
+so an example: this is your brain when you navigate your way through a cluttered UX flow. lots of motor activity, lots of cortical activation, and importantly, the reward structures are dark here. 
+
+the frustration unpredictability is extremely taxing 
+
+[show phone screen recording on left and brain activation on right. would be really nice if we could actually animate the UI and brain activations parametrically rather than just cross-fading]
+
+on the other hand, <speak: with-emphasis>this</spaek: with-emphasis> is your brain when it glides through a well designed app. very natural gestures. not just effortless in the design language terminology, but <speak: with-slight-emphasis>literally</speak: with-slight-emphasis>, this requires less oxygen and blood glucose to process. more predictable, stronger sense of control. your brain is able to get into a much ____er state, and you feel more comfortable interfacing with this UX.
+
+here's another example:
+
+
+TODO: give another example showing unpredicability vs predictability and actually i should move my oxygen, "taxing", frustration, 'effortless' explainations here
+
+and, to be clear, it's really not just any particular region of the brain that should exclusively be stimulated; its the whole trajectory that creates [close up on face] the remarkable phenomenae of human consciousness, the shape of this casual structure as it iterates and integrates along the thalamocortical-thalamal loop and other circuits 
+
+
+ we don't want to recreate the pitfalls that the advertising or pharecuetical industries have gone down with this observation. 
+
+
+
+
+
 so obviously i immediately started feeding it descriptions of user interfaces. like, what does a clean google-style search page do to your brain versus a page covered in popups, auto-playing video, flashing banners, cookie consent walls — the whole nightmare.
 
 [split: left=ux-anim of clean search page (cursor typing, results appearing cleanly) | right=ux-anim of cluttered page (popups spawning, banners flashing, chat widget bouncing, cookie wall sliding up)]
