@@ -1,8 +1,18 @@
 # I Built a Brain Scanner for UI Design
 
+## cuts
+
+- main view chair
+- 
+
 ## the script
 
-So Meta recently released v2 of their fMRI scan prediction neural network TRIBE, and what it does is predict what 20,000 points on your cortex would look like in a brain scanner — given ANY input. text, audio, video. no human in the loop. just... simulated neuroscience.
+[chair i]
+So Meta recently released v2 of their fMRI scan prediction neural network TRIBE. 
+[up-close face]
+fMRIs are these scans that show where in the brain blood is moving around and so the TRIBEv2 neural network predicts how 20,000 different will be activated by visiual, audio, and text stimulii. 
+
+, and what it does is predict what 20,000 points on your cortex would look like in a brain scanner — given ANY input. text, audio, video. no human in the loop. just... simulated neuroscience.
 
 **[cut to screen: terminal running, brain images generating]**
 
